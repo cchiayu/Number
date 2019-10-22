@@ -8,32 +8,53 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = MainActivity.class.getSimpleName();
     private TextView number;
-    private int num;
+    int counter;
+    int secret = new Random().nextInt(10)+1;
+    private ImageView result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "secret" +secret);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         number = findViewById(R.id.num);
+        result = findViewById(R.id.result_image);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int n = Integer.parseInt(number.getText().toString())+1;
-                number.setText(Integer.toString(n));
-            }
+               counter++;
+                number.setText(String.valueOf(counter));
+                result.setAlpha(1.0f);
+                result.setVisibility((View.VISIBLE));
+
+                if (counter == secret) {
+                    Toast.makeText(MainActivity.this, "haha", Toast.LENGTH_LONG).show();
+                    result.setImageResource(R.drawable.shock);
+                } else{
+                    result.setImageResource(R.drawable.smile);
+                    result.animate().alpha(0.0f).setDuration(1200);
+
+                    }
+                }
 
 
         });
@@ -62,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
         public void zero(View view) {
-        num = 0;
-         number.setText(String.valueOf(num));
+        counter = 0;
+        number.setText(String.valueOf(counter));
 
         }
 }
